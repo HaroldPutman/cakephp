@@ -683,10 +683,10 @@ class HtmlHelper extends AppHelper {
  * crumb was added with.
  *
  * ### Options
- * - 'separator' Separator content to insert in between breadcrumbs, defaults to '&raquo;'
- * - 'firstClass' Class for wrapper tag on the first breadcrumb, defaults to 'first'
+ * - `separator` Separator content to insert in between breadcrumbs, defaults to ''
+ * - `firstClass` Class for wrapper tag on the first breadcrumb, defaults to 'first'
  * - 'lastClass' Class for wrapper tag on current active page, defaults to 'last'
- *
+ * 
  * @param array $options Array of html attributes to apply to the generated list elements.
  * @param string|array|boolean $startText This will be the first crumb, if false it defaults to first crumb in array. Can
  *   also be an array, see `HtmlHelper::getCrumbs` for details.
@@ -695,11 +695,11 @@ class HtmlHelper extends AppHelper {
  */
 	public function getCrumbList($options = array(), $startText = false) {
 		$defaults = array('firstClass'=>'first', 'lastClass'=>'last', 'separator' => '');
-		$options += $defaults;
+		$options = array_merge($defaults, (array)$options);
 		$firstClass = $options['firstClass'];
 		$lastClass = $options['lastClass'];
 		$separator = $options['separator'];
-		unset($options['firstClass'], $options['lastClass'], $options['separator']);
+		unset($options['firstClass'], $options['lastClass'], $options['separator']);		
 		$crumbs = $this->_prepareCrumbs($startText);
 		if (!empty($crumbs)) {
 			$result = '';
@@ -712,8 +712,10 @@ class HtmlHelper extends AppHelper {
 				} else {
 					$elementContent = $this->link($crumb[0], $crumb[1], $crumb[2]);
 				}
-				if ($which == 0) {
-					$options['class'] = $firstClass;
+				if (!$which) {
+					if ($firstClass != false) {
+						$options['class'] = $firstClass;
+					}
 				} elseif ($which == $crumbCount - 1) {
 					$options['class'] = $lastClass;
 				}
@@ -727,7 +729,7 @@ class HtmlHelper extends AppHelper {
 			return null;
 		}
 	}
-
+	
 /**
  * Prepends startText to crumbs array if set
  *
