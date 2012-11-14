@@ -685,7 +685,7 @@ class HtmlHelper extends AppHelper {
  * ### Options
  * - `separator` Separator content to insert in between breadcrumbs, defaults to ''
  * - `firstClass` Class for wrapper tag on the first breadcrumb, defaults to 'first'
- * - 'lastClass' Class for wrapper tag on current active page, defaults to 'last'
+ * - `lastClass` Class for wrapper tag on current active page, defaults to 'last'
  * 
  * @param array $options Array of html attributes to apply to the generated list elements.
  * @param string|array|boolean $startText This will be the first crumb, if false it defaults to first crumb in array. Can
@@ -713,11 +713,13 @@ class HtmlHelper extends AppHelper {
 					$elementContent = $this->link($crumb[0], $crumb[1], $crumb[2]);
 				}
 				if (!$which) {
-					if ($firstClass != false) {
+					if ($firstClass !== false) {
 						$options['class'] = $firstClass;
 					}
 				} elseif ($which == $crumbCount - 1) {
-					$options['class'] = $lastClass;
+					if ($lastClass !== false) {
+						$options['class'] = $lastClass;
+					}
 				}
 				if (!empty($separator) && ($crumbCount - $which >= 2)) {
 					$elementContent .= $separator;
@@ -729,7 +731,7 @@ class HtmlHelper extends AppHelper {
 			return null;
 		}
 	}
-	
+
 /**
  * Prepends startText to crumbs array if set
  *
